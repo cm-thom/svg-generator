@@ -1,13 +1,25 @@
-//const { Triangle, Circle, Square } = require('./lib/shapes');
-
 const inquirer = require('inquirer');
 const fs = require('fs');
 
+//writes to file in examples folder
 const saveSVG = (mySVG) => {
     fs.writeFile('./examples/logo.svg', mySVG, (err) => {
         console.log(err)
     });
 };
+
+//solves for shape to pass
+const shapeSolver = (shape) => {
+    if (shape === 'Circle') {
+        return 'circle cx="50" cy="45" r="45"'
+    }
+    else if (shape === 'Triangle') {
+        return 'polygon points="50,0 100,50 0,50"'
+    }
+    else return 'rect width="100" height="100"'
+
+}
+
 
 inquirer.prompt([
     {
@@ -36,17 +48,17 @@ inquirer.prompt([
 //take user data, insert as template literals to make text, shape, colors
 .then((data) => {
     console.log(data)
+    const shape = shapeSolver(data.shape);
     const mySVG = `<svg width="100" height="100">
-  <${data.shape} cx="50" cy="50" r="40" fill="${data.shapeColor}" />
+  <${shape} fill="${data.shapeColor}" />
 
-<text x="100" y="75" font-size="40" text-anchor="middle" fill="${data.characterColor}">${data.characters}</text>
+<text x="50" y="50" font-size="40" text-anchor="middle" fill="${data.characterColor}">${data.characters}</text>
 
   </svg>
 `
 //then save to a .svg in examples
     saveSVG(mySVG);
 });
-
 
 
 
